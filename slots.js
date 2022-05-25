@@ -29,10 +29,6 @@ function placeABet(chips)
     return chips - bet;
 }
 
-/*rl.question("Postaw swój zakład ", (bet) => {
-    console.log(bet);
-});*/
-
 function setSymbolsOnSlots()
 {
     let result = [[], [], [], [], []];
@@ -64,15 +60,6 @@ function setSymbolsOnSlots()
                         result[i].push(Slots.symbols[k]);
                 }
             }
-
-            /*if(random <= probablityOfSelecting[0])
-                result[i+5].push(symbols[0]);
-            else if(random <= (probablityOfSelecting[0] + probablityOfSelecting[1]))
-                result[i+5].push(symbols[1]);
-            else if(random <= (probablityOfSelecting[0] + probablityOfSelecting[1] + probablityOfSelecting[2]))
-                result[i+5].push(symbols[2]);
-            else if(random <= 1)
-                result[i+5].push(symbols[3]);*/
         }
     }
     return result;
@@ -104,15 +91,12 @@ function checkForPayoutLines()
     let result = [];
     for(let i = 0; i < Slots.payoutLines.length; i++)
     {
-        //console.log(Slots.payoutLines[i])
         let numberOfOccurences = 1;
         for(let j = 0; j < 4; j++)
         {
-            /*console.log(symbolArray[Slots.payoutLines[i][j]][j] + " | " + symbolArray[Slots.payoutLines[i][j + 1]][j + 1] + " | " + numberOfOccurences)*/
             if(symbolArray[Slots.payoutLines[i][j]][j] == symbolArray[Slots.payoutLines[i][j + 1]][j + 1] || symbolArray[Slots.payoutLines[i][j]][j] == Slots.symbols[Slots.wild] || symbolArray[Slots.payoutLines[i][j + 1]][j + 1] == Slots.symbols[Slots.wild])
             {
                 numberOfOccurences++;
-                //console.log("dodano")
             }
             else
                 break;
@@ -137,7 +121,6 @@ function checkTheReward()
         symbol = Slots.symbols.indexOf(symbol);
         for(let j = 1; j < Slots.symbolPayoutValues[symbol].length; j++)
         {
-            /*console.log(Slots.symbolPayoutValues[symbol][j][0] + " | " + linesWhichWon[i][1] + " | " + value + " | " + Slots.symbolPayoutValues[symbol][j][1]);*/
             if(Slots.symbolPayoutValues[symbol][j][0] == linesWhichWon[i][1])
             {
                 value += Slots.symbolPayoutValues[symbol][j][1];
