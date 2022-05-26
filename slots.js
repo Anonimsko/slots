@@ -2,28 +2,39 @@ const readline = require("readline");
 
 var rl = readline.createInterface(process.stdin, process.stdout);
 
+/**
+ * Na start można by wypisać dane slot-u, tzn. jakie symbole, jakie wygrane, który symbol to wild, który symbol to mnożnik?
+ */
+
+/**
+ * To można przenieść do osobnego pliku i sformatować (pamiętać o regule 120 znaków na linie).
+ */
 const Slots = 
 {
     symbols: ["X", "O", "W", "^", "+", "H", "C", "?"],
-    probablityOfSelecting: [0.15, 0.2, 0.1, 0.15, 0.15, 0.05, 0.1, 0.1],
-    wild: 2,
-    multipliers: [1, 3],
+    probablityOfSelecting: [0.15, 0.2, 0.1, 0.15, 0.15, 0.05, 0.1, 0.1], // literówka
+    wild: 2, // tylko jeden symbol wild? czy może być więcej?
+    multipliers: [1, 3], // to są dwa mnożniki, czy tylko jeden?
 
     numberOfSymbolsInReel: [2315, 500, 772, 1402, 946],
     minRoll: [943, 111, 230, 518, 394],
     maxRoll: [1964, 350, 625, 1149, 763],
 
+    // vvv formatowanie
     symbolPayoutValues: [[0, [3, 1], [4, 3], [5, 5]], [1, [2, 1], [3, 2], [4, 3], [5, 4]], [2, [3, 3], [4, 6], [5, 9]], [3, [3, 3], [4, 5], [5, 7]], [4, [3, 1], [4, 3], [5, 5]], [5, [3, 1], [4, 3], [5, 5]], [6, [3, 1], [4, 3], [5, 5]], [7, [3, 1], [4, 3], [5, 5]]],
-
+    // vvv formatowanie
     payoutLines: [[0, 0, 0, 0, 0], [1, 1, 1, 1, 1], [2, 2, 2, 2, 2], [0, 1, 2, 1, 0], [2, 1, 0, 1, 2], [0, 0, 1, 0, 0], [2, 2, 1, 2, 2], [1, 2, 2, 2, 1], [1, 0, 0, 0, 1], [1, 0, 1, 0, 1], [1, 2, 1, 2, 1], [0, 1, 0, 1, 0], [2, 1, 2, 1, 2], [1, 1, 0, 1, 1], [1, 1, 2, 1, 1], [0, 1, 1, 1, 0], [2, 1, 1, 1, 2], [0, 1, 2, 2, 2], [2, 1, 0, 0, 0], [0, 0, 1, 2, 2], [2, 2, 1, 0, 0], [1, 2, 1, 0, 1], [1, 0, 1, 2, 1]]
 }
 
+// to może iśc do pliku z readline (zasada SRP)
 let chips = 50000;
 
 function placeABet(chips)
 {
     let bet = 0;
     rl.question("Postaw swój zakład ", (value) => {
+        // a czemu nie aktualizować stanu żetonów tutaj?
+        // może te pytanie w pętli? zamiast rekurencja?
         bet = value;
     });
     return chips - bet;
@@ -69,6 +80,9 @@ function rollTheSlot()
 {
     let symbolArray = setSymbolsOnSlots();
     let result = [[], [], []];
+    /**
+     * Nie widzę zapisu pozycji? Tnz., że większość części bębna nie ma szans być wyświetlona!
+     */
     for(let i = 0; i < 5; i++)
     {
         let random = Math.floor(Math.random() * (Slots.maxRoll[i] - Slots.minRoll[i] + 1)) + Slots.minRoll[i];
@@ -85,6 +99,9 @@ function rollTheSlot()
     return result;
 }
 
+/**
+ * Znów SRP, `checkForPayoutLines` robi teraz losowanie oraz sprawdzanie wygranej.
+ */
 function checkForPayoutLines()
 {
     let symbolArray = rollTheSlot();
@@ -107,6 +124,7 @@ function checkForPayoutLines()
     return result;
 }
 
+// Ponownie SRP.
 function checkTheReward()
 {
     let linesWhichWon = checkForPayoutLines();
