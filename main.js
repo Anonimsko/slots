@@ -13,7 +13,8 @@ app.set('view engine', 'pug');
 
 app.get('/', (request, response) => {
     response.render('index', {
-        date: new Date().toDateString()
+        date: new Date().toDateString(),
+        entries: ["Arek", "Kamil"]
     });
 });
 
