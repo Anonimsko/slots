@@ -14,7 +14,8 @@ app.set('view engine', 'pug');
 app.get('/', (request, response) => {
     response.render('index', {
         date: new Date().toDateString(),
-        entries: ["Arek", "Kamil"]
+        entries: ["Arek", "Kamil"],
+        imgPath: '/images/dummy.png',
     });
 });
 
